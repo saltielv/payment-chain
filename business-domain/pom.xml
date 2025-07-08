@@ -10,4 +10,7 @@
   <packaging>pom</packaging>
   <name>Business Domain</name>
   <description>Root Business Domain</description>
+  <modules>
+    <module>customer</module>
+  </modules>
 </project>
