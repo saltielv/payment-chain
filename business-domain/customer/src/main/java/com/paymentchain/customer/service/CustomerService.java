@@ -1,17 +1,17 @@
 package com.paymentchain.customer.service;
 
-import com.paymentchain.customer.model.Customer;
+import com.paymentchain.customer.dto.CustomerDTO;
 import java.util.List;
 
 public interface CustomerService {
 
-  Customer createCustomer(Customer customer);
+  CustomerDTO createCustomer(CustomerDTO dto);
 
-  Customer getCustomerById(Long id);
+  CustomerDTO getCustomerById(Long id);
 
-  Customer updateCustomerById(Long id, Customer customer);
+  CustomerDTO updateCustomerById(Long id, CustomerDTO dto);
 
-  List<Customer> getAllCustomers();
+  List<CustomerDTO> getAllCustomers();
 
   void deleteCustomerById(Long id);
 }
