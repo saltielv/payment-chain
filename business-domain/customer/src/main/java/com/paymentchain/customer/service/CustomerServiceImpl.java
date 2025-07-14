@@ -6,7 +6,6 @@ import com.paymentchain.customer.model.Customer;
 import com.paymentchain.customer.repository.CustomerRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,9 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public List<CustomerDTO> getAllCustomers() {
-    return customerRepository.findAll().stream()
-        .map(CustomerMapper::toDTO)
-        .collect(Collectors.toList());
+    return customerRepository.findAll().stream().map(CustomerMapper::toDTO).toList();
   }
 
   @Override

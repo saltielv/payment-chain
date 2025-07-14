@@ -4,6 +4,8 @@ import com.paymentchain.customer.dto.CustomerDTO;
 import com.paymentchain.customer.service.CustomerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,30 +24,30 @@ public class CustomerController {
   public final CustomerService customerService;
 
   @GetMapping("/{id}")
-  public CustomerDTO getById(@PathVariable Long id) {
-    return customerService.getCustomerById(id);
+  public ResponseEntity<CustomerDTO> getById(@PathVariable Long id) {
+    return ResponseEntity.ok(customerService.getCustomerById(id));
   }
 
   @GetMapping()
-  public List<CustomerDTO> getAll() {
-    return customerService.getAllCustomers();
+  public ResponseEntity<List<CustomerDTO>> getAll() {
+    return ResponseEntity.ok(customerService.getAllCustomers());
   }
 
   @PostMapping
-  public ResponseEntity<?> create(@RequestBody CustomerDTO dto) {
+  public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO dto) {
     CustomerDTO save = customerService.createCustomer(dto);
-    return ResponseEntity.ok(save);
+    return new ResponseEntity<>(save, HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CustomerDTO dto) {
+  public ResponseEntity<CustomerDTO> update(@PathVariable Long id, @RequestBody CustomerDTO dto) {
     CustomerDTO save = customerService.updateCustomerById(id, dto);
     return ResponseEntity.ok(save);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> delete(@PathVariable Long id) {
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
     customerService.deleteCustomerById(id);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.noContent().build();
   }
 }

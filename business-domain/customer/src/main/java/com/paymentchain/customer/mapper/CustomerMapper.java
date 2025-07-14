@@ -22,7 +22,6 @@ public final class CustomerMapper {
 
   public static Customer toEntity(CustomerDTO dto) {
     return Customer.builder()
-        .id(dto.getId())
         .name(dto.getName())
         .surname(dto.getSurname())
         .iban(dto.getIban())
