@@ -1,10 +1,11 @@
 package com.paymentchain.customer.controller;
 
+import com.paymentchain.customer.dto.CustomerCreateRequestDTO;
+import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
 import com.paymentchain.customer.service.CustomerService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,8 +35,9 @@ public class CustomerController {
   }
 
   @PostMapping
-  public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO dto) {
-    CustomerDTO save = customerService.createCustomer(dto);
+  public ResponseEntity<CustomerCreateResponseDTO> create(
+      @RequestBody CustomerCreateRequestDTO dto) {
+    CustomerCreateResponseDTO save = customerService.createCustomer(dto);
     return new ResponseEntity<>(save, HttpStatus.CREATED);
   }
 

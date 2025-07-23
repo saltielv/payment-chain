@@ -1,6 +1,10 @@
 package com.paymentchain.customer.service;
 
+import com.paymentchain.customer.client.ProductRestClientService;
+import com.paymentchain.customer.dto.CustomerCreateRequestDTO;
+import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
+import com.paymentchain.customer.dto.ProductDTO;
 import com.paymentchain.customer.mapper.CustomerMapper;
 import com.paymentchain.customer.model.Customer;
 import com.paymentchain.customer.repository.CustomerRepository;
@@ -14,11 +18,18 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceImpl implements CustomerService {
 
   private final CustomerRepository customerRepository;
+  private final ProductRestClientService productRestClientService;
 
   @Override
-  public CustomerDTO createCustomer(CustomerDTO dto) {
-    Customer saved = customerRepository.save(CustomerMapper.toEntity(dto));
-    return CustomerMapper.toDTO(saved);
+  public CustomerCreateResponseDTO createCustomer(CustomerCreateRequestDTO dto) {
+
+    List<ProductDTO> foundProducts = productRestClientService.getProductsByIds(dto.getProductIds());
+    List<Long> foundProductsIds = foundProducts.stream().map(ProductDTO::getId).toList();
+
+    Customer saved = customerRepository.save(CustomerMapper.toEntity(dto, foundProductsIds));
+    CustomerCreateResponseDTO result = CustomerMapper.toDTO(saved, foundProducts);
+
+    return result;
   }
 
   @Override

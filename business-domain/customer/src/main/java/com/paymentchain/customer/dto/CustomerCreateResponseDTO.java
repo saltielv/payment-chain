@@ -1,5 +1,6 @@
 package com.paymentchain.customer.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDTO {
+public class CustomerCreateResponseDTO {
   private Long id;
   private String name;
   private String surname;
@@ -19,4 +20,6 @@ public class CustomerDTO {
   private String iban;
   private String phone;
   private String address;
+
+  private List<ProductDTO> products;
 }

@@ -1,11 +1,13 @@
 package com.paymentchain.customer.service;
 
+import com.paymentchain.customer.dto.CustomerCreateRequestDTO;
+import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
 import java.util.List;
 
 public interface CustomerService {
 
-  CustomerDTO createCustomer(CustomerDTO dto);
+  CustomerCreateResponseDTO createCustomer(CustomerCreateRequestDTO dto);
 
   CustomerDTO getCustomerById(Long id);
 
