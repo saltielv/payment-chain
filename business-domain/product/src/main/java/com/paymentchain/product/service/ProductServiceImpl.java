@@ -54,4 +54,10 @@ public class ProductServiceImpl implements ProductService {
             .orElseThrow(() -> new NoSuchElementException("Product not found"));
     productRepository.delete(product);
   }
+
+  @Override
+  public List<ProductDTO> findByIds(List<Long> ids) {
+    List<Product> products = productRepository.findAllById(ids);
+    return products.stream().map(ProductMapper::toDTO).toList();
+  }
 }

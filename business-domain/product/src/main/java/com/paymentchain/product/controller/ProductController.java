@@ -49,4 +49,10 @@ public class ProductController {
     productService.deleteProductById(id);
     return ResponseEntity.noContent().build();
   }
+
+  @PostMapping("/batch")
+  public ResponseEntity<List<ProductDTO>> getProductsByIds(@RequestBody List<Long> productIds) {
+    List<ProductDTO> products = productService.findByIds(productIds);
+    return ResponseEntity.ok(products);
+  }
 }
