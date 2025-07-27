@@ -1,6 +1,8 @@
 package com.paymentchain.customer.service;
 
 import com.paymentchain.customer.client.ProductRestClientService;
+import com.paymentchain.customer.common.exception.BusinessException;
+import com.paymentchain.customer.common.exception.BusinessExceptionReason;
 import com.paymentchain.customer.dto.CustomerCreateRequestDTO;
 import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
@@ -9,7 +11,6 @@ import com.paymentchain.customer.mapper.CustomerMapper;
 import com.paymentchain.customer.model.Customer;
 import com.paymentchain.customer.repository.CustomerRepository;
 import java.util.List;
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
     return customerRepository
         .findById(id)
         .map(CustomerMapper::toDTO)
-        .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        .orElseThrow(() -> new BusinessException(BusinessExceptionReason.CUSTOMER_NOT_FOUND));
   }
 
   @Override
@@ -46,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     Customer customer =
         customerRepository
             .findById(id)
-            .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+            .orElseThrow(() -> new BusinessException(BusinessExceptionReason.CUSTOMER_NOT_FOUND));
 
     // Updating database
     customer.setName(dto.getName());
@@ -70,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
     Customer customer =
         customerRepository
             .findById(id)
-            .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+            .orElseThrow(() -> new BusinessException(BusinessExceptionReason.CUSTOMER_NOT_FOUND));
     customerRepository.delete(customer);
   }
 }
