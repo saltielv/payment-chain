@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum BusinessExceptionReason {
   DEFAULT_BUSINESS_ERROR(
       "Business Error", "An unexpected business error occurred", HttpStatus.PRECONDITION_REQUIRED),
+  ARGUMENT_NOT_VALID_ERROR("Validation Error", "Validation failed", HttpStatus.BAD_REQUEST),
   CUSTOMER_NOT_FOUND(
       "Customer Not Found",
       "Customer not found based on the given external reference",

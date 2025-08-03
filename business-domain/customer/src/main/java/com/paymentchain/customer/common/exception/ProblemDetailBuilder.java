@@ -27,6 +27,11 @@ public class ProblemDetailBuilder {
     return this;
   }
 
+  public ProblemDetailBuilder errors(Map<String, String> errors) {
+    this.errors = errors;
+    return this;
+  }
+
   public ProblemDetail build() {
     ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, detail);
 
