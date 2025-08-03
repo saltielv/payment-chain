@@ -4,6 +4,7 @@ import com.paymentchain.customer.dto.CustomerCreateRequestDTO;
 import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
 import com.paymentchain.customer.service.CustomerService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class CustomerController {
 
   @PostMapping
   public ResponseEntity<CustomerCreateResponseDTO> create(
-      @RequestBody CustomerCreateRequestDTO dto) {
+      @Valid @RequestBody CustomerCreateRequestDTO dto) {
     CustomerCreateResponseDTO save = customerService.createCustomer(dto);
     return new ResponseEntity<>(save, HttpStatus.CREATED);
   }
