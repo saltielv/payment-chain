@@ -1,5 +1,6 @@
 package com.paymentchain.customer.dto;
 
+import com.paymentchain.customer.common.validation.IbanValid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public class CustomerCreateRequestDTO {
   private String code;
 
   @NotBlank(message = "{validation.exception.not_blank}")
+  @IbanValid
   private String iban;
 
   @NotNull(message = "{validation.exception.not_null}")
