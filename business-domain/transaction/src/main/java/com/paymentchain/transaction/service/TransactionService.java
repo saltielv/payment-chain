@@ -1,4 +1,4 @@
-package com.paymentchain.transaction.repository;
+package com.paymentchain.transaction.service;
 
 import com.paymentchain.transaction.dto.TransactionDTO;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 public interface TransactionService {
 
   List<TransactionDTO> findAll();
+
+  List<TransactionDTO> findBy(String iban);
 
   TransactionDTO get(final Long id);
 

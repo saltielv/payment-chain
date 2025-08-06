@@ -6,7 +6,6 @@ import com.paymentchain.transaction.dto.TransactionDTO;
 import com.paymentchain.transaction.mapper.TransactionMapper;
 import com.paymentchain.transaction.model.Transaction;
 import com.paymentchain.transaction.repository.TransactionRepository;
-import com.paymentchain.transaction.repository.TransactionService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -23,6 +22,14 @@ public class TransactionServiceImpl implements TransactionService {
   @Override
   public List<TransactionDTO> findAll() {
     final List<Transaction> transactions = transactionRepository.findAll(Sort.by("id"));
+    return transactions.stream()
+        .map(transaction -> transactionMapper.mapToDTO(transaction, new TransactionDTO()))
+        .toList();
+  }
+
+  @Override
+  public List<TransactionDTO> findBy(String iban) {
+    final List<Transaction> transactions = transactionRepository.findByIban(iban);
     return transactions.stream()
         .map(transaction -> transactionMapper.mapToDTO(transaction, new TransactionDTO()))
         .toList();

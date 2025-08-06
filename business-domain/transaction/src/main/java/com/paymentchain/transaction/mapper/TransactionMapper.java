@@ -10,7 +10,7 @@ public class TransactionMapper {
   public TransactionDTO mapToDTO(final Transaction entity, final TransactionDTO dto) {
     dto.setId(entity.getId());
     dto.setReference(entity.getReference());
-    dto.setIbanAccount(entity.getIbanAccount());
+    dto.setIban(entity.getIban());
     dto.setAmount(entity.getAmount());
     dto.setFee(entity.getFee());
     dto.setDescription(entity.getDescription());
@@ -21,7 +21,7 @@ public class TransactionMapper {
 
   public Transaction mapToEntity(final TransactionDTO dto, final Transaction entity) {
     entity.setReference(dto.getReference());
-    entity.setIbanAccount(dto.getIbanAccount());
+    entity.setIban(dto.getIban());
     entity.setAmount(dto.getAmount());
     entity.setFee(dto.getFee());
     entity.setDescription(dto.getDescription());

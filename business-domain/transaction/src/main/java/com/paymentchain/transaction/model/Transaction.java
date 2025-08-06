@@ -28,7 +28,7 @@ public class Transaction {
 
   @Column private String reference;
 
-  @Column private String ibanAccount;
+  @Column private String iban;
 
   @Column private Double amount;
 

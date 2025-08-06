@@ -15,7 +15,7 @@ public class TransactionDTO {
   private String reference;
 
   @Size(max = 255)
-  private String ibanAccount;
+  private String iban;
 
   @NotNull private Double amount;
 

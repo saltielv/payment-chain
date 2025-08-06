@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -35,6 +36,11 @@ public class TransactionController {
   @GetMapping("/{id}")
   public ResponseEntity<TransactionDTO> getTransaction(@PathVariable final Long id) {
     return ResponseEntity.ok(transactionService.get(id));
+  }
+
+  @GetMapping("/customer/transactions")
+  public ResponseEntity<List<TransactionDTO>> getAllTransactionsByIban(@RequestParam String iban) {
+    return ResponseEntity.ok(transactionService.findBy(iban));
   }
 
   @PostMapping
