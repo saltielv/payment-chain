@@ -1,6 +1,7 @@
 package com.paymentchain.transaction.service;
 
-import com.paymentchain.transaction.common.exception.NotFoundException;
+import com.paymentchain.transaction.common.exception.BusinessException;
+import com.paymentchain.transaction.common.exception.BusinessExceptionReason;
 import com.paymentchain.transaction.dto.TransactionDTO;
 import com.paymentchain.transaction.mapper.TransactionMapper;
 import com.paymentchain.transaction.model.Transaction;
@@ -32,7 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
     return transactionRepository
         .findById(id)
         .map(transaction -> transactionMapper.mapToDTO(transaction, new TransactionDTO()))
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(() -> new BusinessException(BusinessExceptionReason.TRANSACTION_NOT_FOUND));
   }
 
   @Override
@@ -46,7 +47,10 @@ public class TransactionServiceImpl implements TransactionService {
   @Override
   public TransactionDTO update(final Long id, final TransactionDTO transactionDTO) {
     final Transaction transaction =
-        transactionRepository.findById(id).orElseThrow(NotFoundException::new);
+        transactionRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new BusinessException(BusinessExceptionReason.TRANSACTION_NOT_FOUND));
     transactionMapper.mapToEntity(transactionDTO, transaction);
     return transactionMapper.mapToDTO(
         transactionRepository.save(transaction), new TransactionDTO());
@@ -54,6 +58,11 @@ public class TransactionServiceImpl implements TransactionService {
 
   @Override
   public void delete(final Long id) {
-    transactionRepository.deleteById(id);
+    final Transaction transaction =
+        transactionRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new BusinessException(BusinessExceptionReason.TRANSACTION_NOT_FOUND));
+    transactionRepository.delete(transaction);
   }
 }
