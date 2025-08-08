@@ -3,6 +3,8 @@ package com.paymentchain.transaction.common.exception;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,10 +12,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   /**
    * Handles custom business exceptions of type {@link BusinessException}.
@@ -36,9 +40,12 @@ public class GlobalExceptionHandler {
    * Handles exceptions of type {@link MethodArgumentNotValidException}. This exception is thrown
    * when an argument annotated with @Valid failed validation
    */
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ProblemDetail> handleMethodArgumentNotValid(
-      final MethodArgumentNotValidException ex, final ServletWebRequest request) {
+  @Override
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(
+      final MethodArgumentNotValidException ex,
+      final HttpHeaders headers,
+      final HttpStatusCode status,
+      final WebRequest request) {
     Map<String, String> errors =
         ex.getBindingResult().getFieldErrors().stream()
             .collect(
