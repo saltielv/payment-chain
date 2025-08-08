@@ -15,6 +15,13 @@ import org.springframework.web.context.request.ServletWebRequest;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
+  /**
+   * Handles custom business exceptions of type {@link BusinessException}.
+   *
+   * @param ex the thrown {@link BusinessException}
+   * @param request
+   * @return {@linkResponseEntity} emitting the {@link ProblemDetail} response
+   */
   @ExceptionHandler({BusinessException.class})
   public ResponseEntity<ProblemDetail> handleBusinessException(
       final BusinessException ex, final ServletWebRequest request) {
@@ -25,6 +32,10 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(ex.getStatus()).body(problemDetail);
   }
 
+  /**
+   * Handles exceptions of type {@link MethodArgumentNotValidException}. This exception is thrown
+   * when an argument annotated with @Valid failed validation
+   */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ProblemDetail> handleMethodArgumentNotValid(
       final MethodArgumentNotValidException ex, final ServletWebRequest request) {
