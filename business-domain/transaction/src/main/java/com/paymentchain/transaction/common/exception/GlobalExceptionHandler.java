@@ -1,18 +1,14 @@
 package com.paymentchain.transaction.common.exception;
 
 import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
-import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,13 +48,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       final HttpHeaders headers,
       final HttpStatusCode status,
       final WebRequest request) {
-    Map<String, String> errors =
-        ex.getBindingResult().getFieldErrors().stream()
-            .collect(
-                Collectors.toMap(
-                    FieldError::getField, // Key: The field name
-                    FieldError::getDefaultMessage, // Value: The default error message
-                    (existing, replacement) -> existing + ", " + replacement));
+
+    final var errors = ErrorsUtils.compositeValiditionError(ex.getBindingResult());
     ProblemDetail problemDetail =
         new ProblemDetailBuilder(
                 BusinessExceptionReason.ARGUMENT_NOT_VALID_ERROR.getStatus(),
@@ -78,35 +69,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       final HttpStatusCode status,
       final WebRequest request) {
 
-    final String missingParameter;
-    final String missingParameterType;
+    final var missingParameter = ErrorsUtils.extractParameterInfo(ex);
 
-    switch (ex) {
-      case MissingRequestHeaderException headerException -> {
-        missingParameter = headerException.getHeaderName();
-        missingParameterType = "header";
-      }
-      case MissingServletRequestParameterException parameterException -> {
-        missingParameter = parameterException.getParameterName();
-        missingParameterType = "query";
-      }
-      case MissingPathVariableException pathVariableException -> {
-        missingParameter = pathVariableException.getVariableName();
-        missingParameterType = "path";
-      }
-      default -> {
-        missingParameter = "unknown";
-        missingParameterType = "unknown";
-      }
-    }
-
-    String value =
+    String errorMessage =
         String.format(
-            "Missing %s parameter with name '%s'", missingParameterType, missingParameter);
+            "Missing %s parameter with name '%s'",
+            missingParameter.getValue(), missingParameter.getKey());
 
     final ProblemDetail problemDetail =
         new ProblemDetailBuilder(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())
-            .errors(Collections.singletonMap(missingParameter, value))
+            .errors(Collections.singletonMap(missingParameter.getKey(), errorMessage))
             .build();
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
