@@ -3,6 +3,7 @@ package com.paymentchain.transaction.common.exception;
 import com.paymentchain.transaction.common.exception.dto.ErrorDetails;
 import com.paymentchain.transaction.common.exception.dto.ProblemDetailBuilder;
 import com.paymentchain.transaction.common.exception.util.ErrorsUtils;
+import jakarta.validation.ConstraintViolationException;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -120,5 +121,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       final HttpStatusCode status,
       final WebRequest request) {
     return handleServletRequestBindingException(ex, headers, status, request);
+  }
+
+  /**
+   * Handles exceptions of type {@link ConstraintViolationException}. This exception is thrown when
+   * a constraint is violated during the validation of an object or method.
+   */
+  @ExceptionHandler(value = {ConstraintViolationException.class})
+  public ResponseEntity<Object> handleConstraintViolationException(
+      final ConstraintViolationException ex, final ServletWebRequest request) {
+
+    final var errors = ErrorsUtils.compositeValiditionError(ex.getConstraintViolations());
+
+    ProblemDetail problemDetail =
+        new ProblemDetailBuilder(
+                BusinessExceptionReason.ARGUMENT_NOT_VALID_ERROR.getStatus(),
+                BusinessExceptionReason.ARGUMENT_NOT_VALID_ERROR.getDetail())
+            .title(BusinessExceptionReason.ARGUMENT_NOT_VALID_ERROR.getTitle())
+            .errors(errors)
+            .build();
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
   }
 }
