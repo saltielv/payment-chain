@@ -1,5 +1,8 @@
 package com.paymentchain.transaction.common.exception;
 
+import com.paymentchain.transaction.common.exception.dto.ErrorDetails;
+import com.paymentchain.transaction.common.exception.dto.ProblemDetailBuilder;
+import com.paymentchain.transaction.common.exception.util.ErrorsUtils;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -62,6 +65,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         .body(problemDetail);
   }
 
+  /**
+   * Handles exceptions of type {@link ServletRequestBindingException}. This exception is thrown
+   * when an unrecoverable is encountered issue while attempting to bind request parameters,
+   * headers, or other request-related data to method arguments in a controller.
+   */
   @Override
   protected ResponseEntity<Object> handleServletRequestBindingException(
       final ServletRequestBindingException ex,
@@ -78,12 +86,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     final ProblemDetail problemDetail =
         new ProblemDetailBuilder(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage())
-            .errors(Collections.singletonMap(missingParameter.getKey(), errorMessage))
+            .errors(
+                Collections.singletonList(
+                    new ErrorDetails(missingParameter.getKey(), errorMessage)))
             .build();
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
   }
 
+  /**
+   * Handles exceptions of type {@link MissingServletRequestParameterException}. This exception is
+   * thrown when a required request parameter is not present in the HTTP request.
+   */
   @Override
   protected ResponseEntity<Object> handleMissingServletRequestParameter(
       final MissingServletRequestParameterException ex,
@@ -94,6 +108,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return handleServletRequestBindingException(ex, headers, status, request);
   }
 
+  /**
+   * Handles exceptions of type {@link MissingPathVariableException}. This exception is thrown when
+   * a variable expected in the method parameters of an {@link @RequestMapping} method is not
+   * present among the URI variables extracted from the URL.
+   */
   @Override
   protected ResponseEntity<Object> handleMissingPathVariable(
       final MissingPathVariableException ex,

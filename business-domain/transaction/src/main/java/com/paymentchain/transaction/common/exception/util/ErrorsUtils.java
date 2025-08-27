@@ -1,11 +1,12 @@
-package com.paymentchain.transaction.common.exception;
+package com.paymentchain.transaction.common.exception.util;
 
+import com.paymentchain.transaction.common.exception.dto.ErrorDetails;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -24,17 +25,15 @@ public class ErrorsUtils {
     };
   }
 
-  public Map<String, String> compositeValiditionError(Errors err) {
+  public List<ErrorDetails> compositeValiditionError(Errors err) {
     if (!err.hasErrors()) {
-      return Collections.emptyMap();
+      return Collections.emptyList();
     } else {
       return err.getFieldErrors().stream()
           .distinct()
-          .collect(
-              Collectors.toMap(
-                  FieldError::getField,
-                  FieldError::getDefaultMessage,
-                  (existing, replacement) -> existing + "," + replacement));
+          .map(
+              fieldError -> new ErrorDetails(fieldError.getField(), fieldError.getDefaultMessage()))
+          .collect(Collectors.toList());
     }
   }
 }

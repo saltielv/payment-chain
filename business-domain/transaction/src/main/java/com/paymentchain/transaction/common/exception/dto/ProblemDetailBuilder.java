@@ -1,9 +1,9 @@
-package com.paymentchain.transaction.common.exception;
+package com.paymentchain.transaction.common.exception.dto;
 
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 
@@ -12,7 +12,7 @@ public class ProblemDetailBuilder {
   private final HttpStatus status;
   private final String detail;
   private String title;
-  private Map<String, String> errors;
+  private List<ErrorDetails> errors;
 
   private static final String MOZILLA_DEVELOPER_BASE_URL =
       "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/";
@@ -27,7 +27,7 @@ public class ProblemDetailBuilder {
     return this;
   }
 
-  public ProblemDetailBuilder errors(Map<String, String> errors) {
+  public ProblemDetailBuilder errors(List<ErrorDetails> errors) {
     this.errors = errors;
     return this;
   }
