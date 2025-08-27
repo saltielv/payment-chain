@@ -12,4 +12,9 @@ public class WebClientConfig {
   RestClient productRestClient(@Value("${services.product.base-url}") String baseUrl) {
     return RestClient.builder().baseUrl(baseUrl).build();
   }
+
+  @Bean
+  RestClient transactionRestClient(@Value("${services.transaction.base-url}") String baseUrl) {
+    return RestClient.builder().baseUrl(baseUrl).build();
+  }
 }
