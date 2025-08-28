@@ -20,6 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   private final CustomerRepository customerRepository;
   private final ProductRestClientService productRestClientService;
+  private final CustomerMapper customerMapper;
 
   @Override
   public CustomerCreateResponseDTO createCustomer(CustomerCreateRequestDTO dto) {
@@ -27,10 +28,8 @@ public class CustomerServiceImpl implements CustomerService {
     List<ProductDTO> foundProducts = productRestClientService.getProductsByIds(dto.getProductIds());
     List<Long> foundProductsIds = foundProducts.stream().map(ProductDTO::getId).toList();
 
-    Customer saved = customerRepository.save(CustomerMapper.toEntity(dto, foundProductsIds));
-    CustomerCreateResponseDTO result = CustomerMapper.toDTO(saved, foundProducts);
-
-    return result;
+    Customer saved = customerRepository.save(customerMapper.toEntity(dto, foundProductsIds));
+    return customerMapper.toDTO(saved, foundProducts);
   }
 
   @Override
@@ -38,7 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     return customerRepository
         .findById(id)
-        .map(CustomerMapper::toDTO)
+        .map(customer -> customerMapper.toDTO(customer, new CustomerDTO()))
         .orElseThrow(() -> new BusinessException(BusinessExceptionReason.CUSTOMER_NOT_FOUND));
   }
 
@@ -58,12 +57,14 @@ public class CustomerServiceImpl implements CustomerService {
     customer.setAddress(dto.getAddress());
 
     Customer updated = customerRepository.save(customer);
-    return CustomerMapper.toDTO(updated);
+    return customerMapper.toDTO(updated, new CustomerDTO());
   }
 
   @Override
   public List<CustomerDTO> getAllCustomers() {
-    return customerRepository.findAll().stream().map(CustomerMapper::toDTO).toList();
+    return customerRepository.findAll().stream()
+        .map(customer -> customerMapper.toDTO(customer, new CustomerDTO()))
+        .toList();
   }
 
   @Override

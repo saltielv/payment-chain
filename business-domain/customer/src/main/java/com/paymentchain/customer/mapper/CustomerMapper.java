@@ -7,58 +7,53 @@ import com.paymentchain.customer.dto.ProductDTO;
 import com.paymentchain.customer.model.Customer;
 import com.paymentchain.customer.model.CustomerProduct;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public final class CustomerMapper {
 
-  public static CustomerDTO toDTO(Customer entity) {
-    return CustomerDTO.builder()
-        .id(entity.getId())
-        .name(entity.getName())
-        .surname(entity.getSurname())
-        .iban(entity.getIban())
-        .code(entity.getCode())
-        .phone(entity.getPhone())
-        .address(entity.getAddress())
-        .build();
+  public CustomerDTO toDTO(final Customer entity, final CustomerDTO dto) {
+    dto.setId(entity.getId());
+    dto.setName(entity.getName());
+    dto.setSurname(entity.getSurname());
+    dto.setIban(entity.getIban());
+    dto.setCode(entity.getCode());
+    dto.setPhone(entity.getPhone());
+    dto.setAddress(entity.getAddress());
+    return dto;
   }
 
-  public static Customer toEntity(CustomerDTO dto) {
-    return Customer.builder()
-        .name(dto.getName())
-        .surname(dto.getSurname())
-        .iban(dto.getIban())
-        .code(dto.getCode())
-        .phone(dto.getPhone())
-        .address(dto.getAddress())
-        .build();
+  public Customer toEntity(final CustomerDTO dto, final Customer entity) {
+    entity.setName(dto.getName());
+    entity.setSurname(dto.getSurname());
+    entity.setIban(dto.getIban());
+    entity.setCode(dto.getCode());
+    entity.setPhone(dto.getPhone());
+    entity.setAddress(dto.getAddress());
+    return entity;
   }
 
-  public static CustomerCreateResponseDTO toDTO(Customer entity, List<ProductDTO> products) {
-    return CustomerCreateResponseDTO.builder()
-        .id(entity.getId())
-        .name(entity.getName())
-        .surname(entity.getSurname())
-        .iban(entity.getIban())
-        .code(entity.getCode())
-        .phone(entity.getPhone())
-        .address(entity.getAddress())
-        .products(products)
-        .build();
+  public CustomerCreateResponseDTO toDTO(Customer entity, List<ProductDTO> products) {
+    CustomerCreateResponseDTO dto = new CustomerCreateResponseDTO();
+    dto.setId(entity.getId());
+    dto.setName(entity.getName());
+    dto.setSurname(entity.getSurname());
+    dto.setIban(entity.getIban());
+    dto.setCode(entity.getCode());
+    dto.setPhone(entity.getPhone());
+    dto.setAddress(entity.getAddress());
+    dto.setProducts(products);
+    return dto;
   }
 
-  public static Customer toEntity(CustomerCreateRequestDTO request, List<Long> productIds) {
-    Customer entity =
-        Customer.builder()
-            .name(request.getName())
-            .surname(request.getSurname())
-            .iban(request.getIban())
-            .code(request.getCode())
-            .phone(request.getPhone())
-            .address(request.getAddress())
-            .build();
+  public Customer toEntity(CustomerCreateRequestDTO request, List<Long> productIds) {
+    Customer entity = new Customer();
+    entity.setName(request.getName());
+    entity.setSurname(request.getSurname());
+    entity.setIban(request.getIban());
+    entity.setCode(request.getCode());
+    entity.setPhone(request.getPhone());
+    entity.setAddress(request.getAddress());
 
     List<CustomerProduct> customerProducts =
         CustomerProductMapper.toCustomerProductList(productIds);
