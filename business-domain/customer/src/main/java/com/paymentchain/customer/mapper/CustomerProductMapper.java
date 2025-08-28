@@ -9,6 +9,13 @@ import lombok.NoArgsConstructor;
 public class CustomerProductMapper {
 
   public static List<CustomerProduct> toCustomerProductList(List<Long> productIds) {
-    return productIds.stream().map(id -> CustomerProduct.builder().productId(id).build()).toList();
+    return productIds.stream()
+        .map(
+            id -> {
+              CustomerProduct customer = new CustomerProduct();
+              customer.setProductId(id);
+              return customer;
+            })
+        .toList();
   }
 }

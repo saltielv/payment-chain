@@ -3,6 +3,7 @@ package com.paymentchain.customer.controller;
 import com.paymentchain.customer.dto.CustomerCreateRequestDTO;
 import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
+import com.paymentchain.customer.dto.CustomerFullResponseDTO;
 import com.paymentchain.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -52,5 +54,10 @@ public class CustomerController {
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     customerService.deleteCustomerById(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping("/full")
+  public ResponseEntity<CustomerFullResponseDTO> getByCode(@RequestParam String code) {
+	  return ResponseEntity.ok(customerService.getCustomerByCode(code));
   }
 }

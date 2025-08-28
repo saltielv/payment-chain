@@ -3,6 +3,7 @@ package com.paymentchain.customer.mapper;
 import com.paymentchain.customer.dto.CustomerCreateRequestDTO;
 import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
+import com.paymentchain.customer.dto.CustomerFullResponseDTO;
 import com.paymentchain.customer.dto.ProductDTO;
 import com.paymentchain.customer.model.Customer;
 import com.paymentchain.customer.model.CustomerProduct;
@@ -61,5 +62,16 @@ public final class CustomerMapper {
     entity.setCustomerProducts(customerProducts);
 
     return entity;
+  }
+
+  public CustomerFullResponseDTO toDTO(final Customer entity, final CustomerFullResponseDTO dto) {
+    dto.setId(entity.getId());
+    dto.setName(entity.getName());
+    dto.setSurname(entity.getSurname());
+    dto.setIban(entity.getIban());
+    dto.setCode(entity.getCode());
+    dto.setPhone(entity.getPhone());
+    dto.setAddress(entity.getAddress());
+    return dto;
   }
 }

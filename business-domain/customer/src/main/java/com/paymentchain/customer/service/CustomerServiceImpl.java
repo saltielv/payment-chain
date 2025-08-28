@@ -1,14 +1,17 @@
 package com.paymentchain.customer.service;
 
 import com.paymentchain.customer.client.ProductRestClientService;
+import com.paymentchain.customer.client.TransactionRestClientService;
 import com.paymentchain.customer.common.exception.BusinessException;
 import com.paymentchain.customer.common.exception.BusinessExceptionReason;
 import com.paymentchain.customer.dto.CustomerCreateRequestDTO;
 import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
+import com.paymentchain.customer.dto.CustomerFullResponseDTO;
 import com.paymentchain.customer.dto.ProductDTO;
 import com.paymentchain.customer.mapper.CustomerMapper;
 import com.paymentchain.customer.model.Customer;
+import com.paymentchain.customer.model.CustomerProduct;
 import com.paymentchain.customer.repository.CustomerRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   private final CustomerRepository customerRepository;
   private final ProductRestClientService productRestClientService;
+  private final TransactionRestClientService transactionRestClientService;
   private final CustomerMapper customerMapper;
 
   @Override
@@ -74,5 +78,25 @@ public class CustomerServiceImpl implements CustomerService {
             .findById(id)
             .orElseThrow(() -> new BusinessException(BusinessExceptionReason.CUSTOMER_NOT_FOUND));
     customerRepository.delete(customer);
+  }
+
+  @Override
+  public CustomerFullResponseDTO getCustomerByCode(String code) {
+    Customer customer =
+        customerRepository
+            .findByCode(code)
+            .orElseThrow(() -> new BusinessException(BusinessExceptionReason.CUSTOMER_NOT_FOUND));
+    List<CustomerProduct> products = customer.getCustomerProducts();
+    List<Long> foundProductsIds = products.stream().map(CustomerProduct::getId).toList();
+
+    List<ProductDTO> foundProducts = productRestClientService.getProductsByIds(foundProductsIds);
+    List<?> transactions = transactionRestClientService.getTransactionsByIban(customer.getIban());
+
+    CustomerFullResponseDTO dto = new CustomerFullResponseDTO();
+    customerMapper.toDTO(customer, dto);
+
+    dto.setProducts(foundProducts);
+    dto.setTransactions(transactions);
+    return dto;
   }
 }
