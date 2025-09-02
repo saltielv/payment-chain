@@ -2,9 +2,11 @@ package com.paymentchain.product.controller;
 
 import com.paymentchain.product.dto.ProductDTO;
 import com.paymentchain.product.service.ProductService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping(value = "/api/products", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -33,6 +35,7 @@ public class ProductController {
   }
 
   @PostMapping
+  @ApiResponse(responseCode = "201")
   public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO dto) {
     ProductDTO save = productService.createProduct(dto);
     return new ResponseEntity<>(save, HttpStatus.CREATED);
@@ -45,6 +48,7 @@ public class ProductController {
   }
 
   @DeleteMapping("/{id}")
+  @ApiResponse(responseCode = "204")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     productService.deleteProductById(id);
     return ResponseEntity.noContent().build();
