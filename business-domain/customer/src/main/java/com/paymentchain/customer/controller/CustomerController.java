@@ -5,10 +5,13 @@ import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
 import com.paymentchain.customer.dto.CustomerFullResponseDTO;
 import com.paymentchain.customer.service.CustomerService;
+
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping(value = "/api/customers", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -38,6 +41,7 @@ public class CustomerController {
   }
 
   @PostMapping
+  @ApiResponse(responseCode = "201")
   public ResponseEntity<CustomerCreateResponseDTO> create(
       @Valid @RequestBody CustomerCreateRequestDTO dto) {
     CustomerCreateResponseDTO save = customerService.createCustomer(dto);
@@ -51,6 +55,7 @@ public class CustomerController {
   }
 
   @DeleteMapping("/{id}")
+  @ApiResponse(responseCode = "204")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     customerService.deleteCustomerById(id);
     return ResponseEntity.noContent().build();
@@ -58,6 +63,6 @@ public class CustomerController {
 
   @GetMapping("/full")
   public ResponseEntity<CustomerFullResponseDTO> getByCode(@RequestParam String code) {
-	  return ResponseEntity.ok(customerService.getCustomerByCode(code));
+    return ResponseEntity.ok(customerService.getCustomerByCode(code));
   }
 }
