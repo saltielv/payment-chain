@@ -37,5 +37,6 @@
   </build>
   <modules>
     <module>business-domain</module>
+    <module>infrastructure-domain</module>
   </modules>
 </project>
