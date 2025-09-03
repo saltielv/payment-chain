@@ -5,7 +5,7 @@
     <artifactId>payment-chain-parent</artifactId>
     <version>${revision}</version>
   </parent>
-  <groupId>com.paymentchain.bussiness</groupId>
+  <groupId>com.paymentchain.business</groupId>
   <artifactId>business-domain</artifactId>
   <packaging>pom</packaging>
   <name>Business Domain</name>

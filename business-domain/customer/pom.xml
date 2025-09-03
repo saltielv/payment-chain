@@ -9,10 +9,10 @@
 		<version>3.5.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.paymentchain.customer</groupId>
-	<artifactId>customer</artifactId>
+	<groupId>com.paymentchain.business</groupId>
+	<artifactId>business-customer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>customer</name>
+	<name>Customer</name>
 	<description>Customer Microservice</description>
 
 	<developers>

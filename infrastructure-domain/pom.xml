@@ -8,6 +8,6 @@
   <groupId>com.paymentchain.infrastructure</groupId>
   <artifactId>infrastructure-domain</artifactId>
   <packaging>pom</packaging>
-  <name>Infrastructure</name>
+  <name>Infrastructure Domain</name>
   <description>Root Infrastructure Domain</description>
 </project>

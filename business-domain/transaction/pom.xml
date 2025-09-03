@@ -9,10 +9,10 @@
 		<version>3.5.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.paymentchain.transaction</groupId>
-	<artifactId>transaction</artifactId>
+	<groupId>com.paymentchain.business</groupId>
+	<artifactId>business-transaction</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>transaction</name>
+	<name>Transaction</name>
 	<description>Transaction Microservice</description>
 	<url />
 	<licenses>
