@@ -1,16 +1,20 @@
 package com.paymentchain.customer.client;
 
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 @Service
-@RequiredArgsConstructor
 public class TransactionRestClientService {
 
   private final RestClient transactionRestClient;
+
+  public TransactionRestClientService(
+      @Qualifier("transactionRestClient") RestClient transactionRestClient) {
+    this.transactionRestClient = transactionRestClient;
+  }
 
   public List<?> getTransactionsByIban(String iban) {
     return transactionRestClient

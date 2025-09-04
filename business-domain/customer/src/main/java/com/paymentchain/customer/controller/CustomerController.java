@@ -5,7 +5,6 @@ import com.paymentchain.customer.dto.CustomerCreateResponseDTO;
 import com.paymentchain.customer.dto.CustomerDTO;
 import com.paymentchain.customer.dto.CustomerFullResponseDTO;
 import com.paymentchain.customer.service.CustomerService;
-
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
