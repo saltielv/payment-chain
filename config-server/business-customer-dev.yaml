@@ -1,0 +1,30 @@
+# Server Port
+server:
+  port: 8081
+
+spring:
+# DataBase Configuration
+  datasource:
+    url: jdbc:h2:mem:customer
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+  jpa:
+    show-sql: true
+  h2:
+    console:
+    enabled: true
+# Message Source Configuration
+  messages:
+    fallback-to-system-locale: 'false'
+    basename: messages
+
+# Locale Languages Configuration
+supported-locales: en, es
+
+# Web Client Configuration
+services:
+  transaction:
+    base-url: http://localhost:8083/api/transactions
+  product:
+    base-url: http://localhost:8082/api/products
