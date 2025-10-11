@@ -1,0 +1,20 @@
+#Swagger
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+# Eureka
+eureka:
+  client:
+    healthcheck:
+      enabled: 'true'
+    fetch-registry: 'true'
+    register-with-eureka: 'true'
+    service-url:
+      default: ${EUREKA_SERVER:http://localhost:8761/eureka}
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
